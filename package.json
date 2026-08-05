@@ -1,11 +1,12 @@
 {
-  "name": "pws-27-juli-2026",
+  "name": "pws-5-agustus-2026",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
