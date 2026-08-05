@@ -34,13 +34,12 @@ async function getAll(req, res) {
 
 async function create(req, res) {
   try {
-    const {
-      judul,
-      sinopsis,
-      tahun_terbit,
-      penulis_id,
-      genre_ids
-    } = req.body;
+    // Ambil data dari req.body (bisa terima format "judul" atau "judul_komik")
+    const judul_komik = req.body.judul_komik || req.body.judul;
+    const sinopsis_komik = req.body.sinopsis_komik || req.body.sinopsis;
+    const tahun_terbit_komik = req.body.tahun_terbit_komik || req.body.tahun_terbit;
+    const penulis_id = req.body.penulis_id;
+    const genre_ids = req.body.genre_ids;
 
     const penulis = await Penulis.findByPk(penulis_id);
     if (!penulis) {
@@ -49,10 +48,11 @@ async function create(req, res) {
       });
     }
 
+    // Masukkan ke database sesuai nama kolom di model
     const komik = await Komik.create({
-      judul,
-      sinopsis,
-      tahun_terbit,
+      judul_komik,
+      sinopsis_komik,
+      tahun_terbit_komik,
       penulis_id
     });
 
@@ -66,7 +66,8 @@ async function create(req, res) {
       await komik.setGenre(genres);
     }
 
-    const result = await Komik.findByPk(komik.id, {
+    // Menggunakan komik.id_komik sesuai Primary Key di model
+    const result = await Komik.findByPk(komik.id_komik, {
       include: [
         {
           model: Penulis,
@@ -97,13 +98,11 @@ async function create(req, res) {
 async function update(req, res) {
   try {
     const { id } = req.params;
-    const {
-      judul,
-      sinopsis,
-      tahun_terbit,
-      penulis_id,
-      genre_ids
-    } = req.body;
+    const judul_komik = req.body.judul_komik || req.body.judul;
+    const sinopsis_komik = req.body.sinopsis_komik || req.body.sinopsis;
+    const tahun_terbit_komik = req.body.tahun_terbit_komik || req.body.tahun_terbit;
+    const penulis_id = req.body.penulis_id;
+    const genre_ids = req.body.genre_ids;
 
     const komik = await Komik.findByPk(id);
     if (!komik) {
@@ -113,9 +112,9 @@ async function update(req, res) {
     }
 
     await komik.update({
-      judul,
-      sinopsis,
-      tahun_terbit,
+      judul_komik,
+      sinopsis_komik,
+      tahun_terbit_komik,
       penulis_id
     });
 
