@@ -21,23 +21,23 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         }
-
-
     }, {
         tableName: 'komik',
         timestamps: true
     });
-    komik.associate = (models) => {
-        komik.belongsTo(models.Penulis, {
+
+    Komik.associate = (models) => {
+        Komik.belongsTo(models.Penulis, {
             foreignKey: 'penulis_id',
             as: 'penulis'
         });
-        komik.belongsToMany(models.Genre, {
+        Komik.belongsToMany(models.Genre, {
             through: 'KomikGenre',
             foreignKey: 'komik_id',
             otherKey: 'genre_id',
             as: 'genre'
         });
     };
+
     return Komik;
-}
+};
