@@ -9,6 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 let databaseReady = false;
 let databasePromise = null;
 
+// Middleware Inisialisasi Database
 app.use(async (req, res, next) => {
   try {
     if (!databaseReady) {
@@ -23,15 +24,32 @@ app.use(async (req, res, next) => {
     next();
   } catch (error) {
     console.error("Database initialization failed:", error.message);
-
     databasePromise = null;
 
     return res.status(500).json({
-      message: "Database initialization failed."
+      message: "Database initialization failed.",
+      error: error.message
     });
   }
 });
 
+// Route Utama (Supaya URL Vercel tidak 404 saat dibuka)
+app.get("/", (req, res) => {
+  res.json({
+    status: "OK",
+    message: "API Service is running successfully on Vercel!"
+  });
+});
+
+// Route API
 app.use("/api", require("./routes/api"));
+
+// Agar bisa dijalankan di komputer lokal (npm run dev)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running locally on http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;
